@@ -1,0 +1,22 @@
+name: build
+
+on:
+  push:
+    branches: ["asdf*"]
+  workflow_call:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        target: [foo, bar]
+    runs-on: ubuntu-22.04
+    name: build ${{ matrix.target }}
+    steps:
+      - run: |
+          echo "${{ matrix.target }} @ $(date -u)" >> ${{ matrix.target }}.txt
+        shell: bash
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.target }}
+          path: ${{ matrix.target }}.txt
